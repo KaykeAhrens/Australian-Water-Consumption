@@ -1,76 +1,62 @@
-# Pokémon Scraper
+# Consumo de Água Residencial na Austrália (2014-2022)  
+**Análise de Séries Temporais + Estruturas Probabilísticas com Redis**
 
-Este projeto coleta e processa dados de Pokémon de forma automatizada.
+![Python](https://img.shields.io/badge/python-3.9%2B-blue)
+![Redis](https://img.shields.io/badge/redis-%23DC382D.svg?style=flat&logo=redis&logoColor=white)
+![Pandas](https://img.shields.io/badge/pandas-%23150458.svg?style=flat&logo=pandas&logoColor=white)
 
-## Como rodar o projeto
+## Descrição do Projeto
+Análise completa de série temporal anual do consumo de água distribuída para residências na Austrália, utilizando dados oficiais do **Australian Bureau of Statistics (ABS)** – Water Account, Australia 2021-22.
 
-Siga os passos abaixo para configurar e executar o scraper:
+**Técnicas aplicadas:**
+- Análise exploratória (tendências, médias móveis)
+- Autocorrelação (ACF/PACF)
+- Modelagem preditiva com **ARIMA(1,1,1)**
+- Estruturas probabilísticas em **Redis Cloud**:
+  - **HyperLogLog** → cardinalidade de faixas de consumo
+  - **Count-Min Sketch** → frequência aproximada de anos com alto consumo
 
-1. Clone este repositório:
+## Dataset
+- **Fonte oficial**: Australian Bureau of Statistics (ABS)  
+  Link: https://www.abs.gov.au/statistics/environment/environmental-accounts/water-account-australia/latest-release
+- **Coleta**: Hidrômetros + relatórios de concessionárias estaduais
+- **Período**: 2014-15 a 2021-22 (8 observações anuais)
+- **Variável**: Consumo residencial distribuído (Gigalitros – GL)
+- **Download automático** no notebook (Célula 2)
+
+## Como Executar
+1. Clone o repositório
    ```bash
-   git clone https://github.com/seu-usuario/seu-repositorio.git
-   ```
+   git clone https://github.com/SEU_USUARIO/agua-australia-senac.git
+   cd agua-australia-senac
 
-2. Crie um ambiente virtual:
-   ```bash
-   python -m venv venv
-   ```
-
-3. Ative o ambiente virtual:
-
-   - **Windows (PowerShell):**
-     > Se aparecer erro de permissão, rode este comando **antes** (como administrador ou no próprio PowerShell do usuário):
-     ```bash
-     Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
-     ```
-     Depois ative o ambiente:
-     ```bash
-     venv\Scripts\Activate.ps1
-     ```
-
-   - **Windows (CMD):**
-     ```bash
-     venv\Scripts\activate.bat
-     ```
-
-   - **Linux/MacOS:**
-     ```bash
-     source venv/bin/activate
-     ```
-
-4. Instale as dependências:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-5. Acesse a pasta principal:
-   ```bash
-   cd pokemon_scraper
-   ```
-
-6. Execute o scraper:
-   ```bash
-   python run_scrapers.py
-   ```
-
----
-
-## Estrutura do Projeto
-
+2. Crie ambiente (opcional)
+```bash
+pip install -r requirements.txt
 ```
-.
-├── data_processing/     # Scripts de tratamento e análise dos dados
-├── pokemon_scraper/     # Código principal do scraper
-├── queries/             # Consultas auxiliares
-├── requirements.txt     # Dependências do projeto
-├── README.md            # Documentação
-└── venv/                # Ambiente virtual (não incluído no repositório)
+3. Abra no Colab ou Jupyter:
+→ notebooks/analise_consumo_agua_australia.ipynb
+
+4. Redis Cloud (gratuito):
+Crie conta em https://redis.com/labs
+Ative o módulo RedisBloom
+Cole a URL completa na Célula 7 (já tem exemplo)
+
+Obs: O dataset .xlsx é baixado automaticamente. Não precisa fazer upload.
+Resultados Principais
+
+Tendência de queda de ~5% no consumo pós-2019 (políticas de eficiência hídrica)
+Previsão ARIMA(1,1,1): ~1.755 GL em 2024-25
+Redis:
+Apenas 3 faixas de consumo em 8 anos (baixa diversidade)
+4 anos com consumo alto (detectados com Count-Min Sketch)
+Uso de memória: ~400 bytes vs ~8 KB em pandas
+
+Estrutura do Repositório
+```text
+├── notebooks/          → Notebook principal
+├── sample_data/        → Dataset baixado automaticamente
+├── README.md           → Este arquivo
+├── enunciado-tema.md   → Enunciado original
 ```
-
----
-
-## Observações
-
-- Certifique-se de estar com o **Python 3.10+** instalado.  
-- O comando `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned` só precisa ser feito uma vez no Windows.  
-# Australian-Water-Consumption
+   
